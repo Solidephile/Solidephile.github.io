@@ -1,6 +1,6 @@
 async function loadOsuData() {
     try {
-        const response = await fetch("data/osu.json");
+        const response = await fetch("data/osu.json?t=" + Date.now())
 
         if (!response.ok) {
             throw new Error("无法读取 osu.json");
