@@ -1,1 +1,115 @@
-<h1>测试 Test</h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My osu! Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- Header -->
+        <header class="hero">
+            <div>
+                <p class="eyebrow">MY PROFILE</p>
+                <h1>osu! Stats</h1>
+                <p class="subtitle">
+                    A small part of my personal website.
+                </p>
+            </div>
+
+            <div class="osu-logo">
+                osu!
+            </div>
+        </header>
+
+
+        <!-- Player Card -->
+        <section class="profile-card">
+
+            <div class="profile-header">
+                <div class="avatar">
+                    O
+                </div>
+
+                <div>
+                    <p class="player-label">PLAYER</p>
+                    <h2 id="username">YourUsername</h2>
+                    <p id="country">Japan</p>
+                </div>
+            </div>
+
+
+            <!-- Stats -->
+            <div class="stats-grid">
+
+                <div class="stat">
+                    <span class="stat-label">
+                        GLOBAL RANK
+                    </span>
+
+                    <strong id="global-rank">
+                        #12,345
+                    </strong>
+                </div>
+
+
+                <div class="stat">
+                    <span class="stat-label">
+                        COUNTRY RANK
+                    </span>
+
+                    <strong id="country-rank">
+                        #1,234
+                    </strong>
+                </div>
+
+
+                <div class="stat">
+                    <span class="stat-label">
+                        PERFORMANCE
+                    </span>
+
+                    <strong id="pp">
+                        8,542
+                        <small>pp</small>
+                    </strong>
+                </div>
+
+
+                <div class="stat">
+                    <span class="stat-label">
+                        PLAY TIME
+                    </span>
+
+                    <strong id="play-time">
+                        123h 45m
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+        <footer>
+            <span>Last updated:</span>
+            <span id="last-updated">2026-09-01</span>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

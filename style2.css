@@ -1,0 +1,245 @@
+/* 全局重置，让所有元素的边距和内边距归零 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 整个页面的字体和背景 */
+body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background-color: #f8f9fa;  /* 柔和的浅灰色背景 */
+    color: #2d3436;            /* 深灰偏蓝的文字颜色 */
+    line-height: 1.6;
+}
+
+/* ===== 1. 导航栏 ===== */
+nav {
+    display: flex;            /* 使用 Flex 布局，让 logo 和链接在一行 */
+    justify-content: space-between; /* logo 靠左，链接靠右 */
+    align-items: center;      /* 垂直居中 */
+    padding: 1rem 5%;        /* 上下 1rem，左右 5% 的边距 */
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* 底部淡淡阴影 */
+    position: sticky;        /* 滚动时导航栏固定在顶部 */
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6c5ce7;          /* 紫色调，突出品牌感 */
+}
+
+.nav-links {
+    list-style: none;        /* 去掉默认的圆点 */
+    display: flex;
+    gap: 2rem;              /* 链接之间的间距 */
+}
+
+.nav-links a {
+    text-decoration: none;  /* 去掉下划线 */
+    color: #2d3436;
+    font-weight: 500;
+    transition: color 0.2s; /* 鼠标悬停时的过渡动画 */
+}
+
+.nav-links a:hover {
+    color: #6c5ce7;         /* 悬停时变为紫色 */
+}
+
+/* ===== 2. Hero 主视觉区 ===== */
+.hero {
+    text-align: center;     /* 居中对齐 */
+    padding: 4rem 1rem;    /* 上下内边距大一些，让它更突出 */
+    background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+    /* 上面这是渐变背景，如果你不喜欢，可以改成纯色 background-color: #dfe6e9; */
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    color: #2d3436;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #636e72;
+    margin-bottom: 1.5rem;
+}
+
+/* 兴趣标签的样式 */
+.tags span {
+    display: inline-block;
+    background-color: #ffffff;
+    padding: 0.4rem 1.2rem;
+    margin: 0 0.5rem;
+    border-radius: 30px;    /* 圆角胶囊形状 */
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s;
+}
+
+.tags span:hover {
+    transform: translateY(-3px); /* 鼠标悬停时微微上浮 */
+}
+
+/* ===== 3. 兴趣按钮墙 ===== */
+.interest-wall {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4列网格，每个格子等宽 */
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem 3rem;
+    /* 让网格自动按内容撑开高度，避免空白 */
+    grid-auto-rows: minmax(100px, auto);
+}
+
+/* 所有磁贴的通用样式 */
+.tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    text-decoration: none;        /* 去掉下划线 */
+    color: #ffffff;
+    padding: 1.2rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* 让文字在卡片内垂直居中 */
+    text-align: center;
+    min-height: 100px;
+}
+
+.tile:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* 卡片内容的文字样式 */
+.tile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.tile-icon {
+    font-size: 2.2rem;
+    margin-bottom: 4px;
+}
+
+.tile-content h3 {
+    font-size: 1.2rem;
+    margin: 4px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.tile-content p {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    margin: 2px 0 0;
+    line-height: 1.4;
+    max-width: 90%;
+}
+
+/* ===== 定义不同尺寸的磁贴 ===== */
+
+/* 1x1 — 占 1 列 1 行 */
+.tile-1x1 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* 1x2 — 占 1 列 2 行（纵向长方形） */
+.tile-1x2 {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+/* 2x1 — 占 2 列 1 行（横向长方形） */
+.tile-2x1 {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+/* 2x2 — 占 2 列 2 行（大正方形） */
+.tile-2x2 {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* ===== 响应式：在手机/小平板上调整为 2 列 ===== */
+@media (max-width: 700px) {
+    .interest-wall {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    /* 在窄屏上，所有尺寸统一变为 1x1（小方块） */
+    .tile-1x1,
+    .tile-1x2,
+    .tile-2x1,
+    .tile-2x2 {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .tile-content p {
+        display: none; /* 手机上隐藏小字，保持简洁 */
+    }
+
+    .tile-icon {
+        font-size: 1.8rem;
+    }
+}
+
+/* ===== 超小屏手机：调整为 1 列 ===== */
+@media (max-width: 450px) {
+    .interest-wall {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+    width: 250px;           /* 固定宽度，让三张卡片整齐 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s, transform 0.3s;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.card:hover {
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15);
+    transform: translateY(-8px); /* 悬停时上浮 */
+}
+
+.card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.card p {
+    color: #636e72;
+    font-size: 0.95rem;
+}
+
+/* ===== 4. 页脚 ===== */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: #b2bec3;
+    font-size: 0.9rem;
+    border-top: 1px solid #dfe6e9;
+    margin-top: 1rem;
+}
