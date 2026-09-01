@@ -1,11 +1,15 @@
 const fs = require("fs");
 
+
 const clientId = process.env.OSU_CLIENT_ID;
 const clientSecret = process.env.OSU_CLIENT_SECRET;
-const username = process.env.OSU_USERNAME || "YourUsername";
+
+const username = process.env.OSU_USERNAME;
 
 
 async function getAccessToken() {
+
+    console.log("正在获取 osu! Access Token...");
 
     const response = await fetch(
         "https://osu.ppy.sh/oauth/token",
@@ -29,8 +33,11 @@ async function getAccessToken() {
 
 
     if (!response.ok) {
+
+        const text = await response.text();
+
         throw new Error(
-            `获取 OAuth Token 失败: ${response.status}`
+            `获取 Access Token 失败: ${response.status}\n${text}`
         );
     }
 
@@ -43,20 +50,35 @@ async function getAccessToken() {
 
 async function getUser(token) {
 
+    console.log(
+        `正在获取 ${username} 的 osu! 数据...`
+    );
+
+
+    const url =
+        `https://osu.ppy.sh/api/v2/users/@${encodeURIComponent(username)}/osu`;
+
+
     const response = await fetch(
-        `https://osu.ppy.sh/api/v2/users/@${encodeURIComponent(username)}/osu`,
+        url,
         {
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Accept": "application/json"
+                "Authorization":
+                    `Bearer ${token}`,
+
+                "Accept":
+                    "application/json"
             }
         }
     );
 
 
     if (!response.ok) {
+
+        const text = await response.text();
+
         throw new Error(
-            `获取 osu 用户数据失败: ${response.status}`
+            `获取用户数据失败: ${response.status}\n${text}`
         );
     }
 
@@ -67,31 +89,43 @@ async function getUser(token) {
 
 async function main() {
 
-    if (!clientId || !clientSecret) {
+    if (!clientId) {
         throw new Error(
-            "没有找到 OSU_CLIENT_ID 或 OSU_CLIENT_SECRET"
+            "OSU_CLIENT_ID 没有设置"
         );
     }
 
 
-    console.log("正在获取 osu! OAuth Token...");
-
-    const token = await getAccessToken();
-
-
-    console.log(
-        `正在获取 ${username} 的 osu! 数据...`
-    );
-
-    const user = await getUser(token);
+    if (!clientSecret) {
+        throw new Error(
+            "OSU_CLIENT_SECRET 没有设置"
+        );
+    }
 
 
-    const statistics = user.statistics;
+    if (!username) {
+        throw new Error(
+            "OSU_USERNAME 没有设置"
+        );
+    }
+
+
+    const token =
+        await getAccessToken();
+
+
+    const user =
+        await getUser(token);
+
+
+    const statistics =
+        user.statistics;
 
 
     const result = {
 
-        username: user.username,
+        username:
+            user.username,
 
         country:
             user.country?.name || "Unknown",
@@ -117,22 +151,40 @@ async function main() {
     };
 
 
-    fs.mkdirSync("data", {
-        recursive: true
-    });
+    fs.mkdirSync(
+        "data",
+        {
+            recursive: true
+        }
+    );
 
 
     fs.writeFileSync(
+
         "data/osu.json",
-        JSON.stringify(result, null, 4)
+
+        JSON.stringify(
+            result,
+            null,
+            4
+        ) + "\n"
+
     );
 
 
     console.log(
-        "osu 数据更新成功:"
+        "================================"
+    );
+
+    console.log(
+        "osu! 数据更新成功！"
     );
 
     console.log(result);
+
+    console.log(
+        "================================"
+    );
 }
 
 
