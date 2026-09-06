@@ -77,7 +77,7 @@ jobs:
 
         run: |
 
-          node scripts/update-osu.js
+          node scripts/update_osu.js
 
 
       # 5. 提交历史数据到 osu_data 分支
