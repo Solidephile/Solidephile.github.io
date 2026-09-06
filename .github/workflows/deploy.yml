@@ -1,134 +1,112 @@
 name: Update osu Stats and Deploy
 
-
 on:
-
-  # 可以手动运行
   workflow_dispatch:
-
-  # 每天运行一次
-  # GitHub 使用 UTC
-  # 16:00 UTC = UTC+8 0:00
   schedule:
-    - cron: "0 16 * * *"
-
+    - cron: "17 2 * * *"
 
 permissions:
-
   contents: write
   pages: write
   id-token: write
 
-
 concurrency:
-
   group: "pages"
   cancel-in-progress: false
 
-
 jobs:
-
-
   build:
-
     runs-on: ubuntu-latest
 
-
     steps:
-
-
-      # 1. 获取 main 分支的网站代码
-      - name: Checkout
+      # =========================
+      # 1. Checkout main
+      # =========================
+      - name: Checkout main
         uses: actions/checkout@v4
 
+      # =========================
+      # 2. Checkout osu_data
+      # =========================
+      - name: Checkout osu_data branch
+        uses: actions/checkout@v4
+        with:
+          ref: osu_data
+          path: osu_data_branch
 
-      # 2. 获取 osu-data 分支
-      - name: Fetch osu data branch
+      # =========================
+      # 3. Copy history to main
+      # =========================
+      - name: Prepare osu history
         run: |
-
-          git fetch origin osu_data:refs/remotes/origin/osu_data
-
           mkdir -p data
+          cp osu_data_branch/data/osu_history.json data/osu_history.json
 
-          git show origin/osu_data:data/osu_history.json > data/osu_history.json
-
-
-      # 3. 安装 Node.js
+      # =========================
+      # 4. Setup Node.js
+      # =========================
       - name: Setup Node.js
         uses: actions/setup-node@v4
-
         with:
           node-version: 22
 
-
-      # 4. 获取最新 osu 数据
+      # =========================
+      # 5. Update osu stats
+      # =========================
       - name: Update osu stats
-
         env:
-
-          OSU_CLIENT_ID:
-            ${{ secrets.OSU_CLIENT_ID }}
-
-          OSU_CLIENT_SECRET:
-            ${{ secrets.OSU_CLIENT_SECRET }}
-
-          OSU_USERNAME:
-            Solidephile
-
+          OSU_CLIENT_ID: ${{ secrets.OSU_CLIENT_ID }}
+          OSU_CLIENT_SECRET: ${{ secrets.OSU_CLIENT_SECRET }}
+          OSU_USERNAME: Solidephile
         run: |
-
           node scripts/update_osu.js
 
-
-      # 5. 提交历史数据到 osu_data 分支
+      # =========================
+      # 6. Save osu history
+      # =========================
       - name: Save osu history
-
+        working-directory: osu_data_branch
         run: |
+          cp ../data/osu_history.json data/osu_history.json
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add data/osu_history.json
 
-          git commit -m "Update osu stats"
+          if git diff --cached --quiet; then
+            echo "No osu stats changes."
+          else
+            git commit -m "Update osu stats"
+            git push origin osu_data
+          fi
 
-          git push origin HEAD:osu_data
-
-
-      # 6. 配置 GitHub Pages
+      # =========================
+      # 7. Setup Pages
+      # =========================
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-
-      # 7. 将整个网站打包
+      # =========================
+      # 8. Upload website
+      # =========================
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-
         with:
           path: .
 
-
+  # =========================
+  # 9. Deploy
+  # =========================
   deploy:
-
-
     environment:
-
       name: github-pages
-
       url: ${{ steps.deployment.outputs.page_url }}
 
-
     runs-on: ubuntu-latest
-
     needs: build
 
-
     steps:
-
-
-      # 8. 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
-
         id: deployment
-
         uses: actions/deploy-pages@v4
