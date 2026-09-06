@@ -1,5 +1,18 @@
 {
     "username": "Solidephile",
     "mode": "osu",
-    "history": []
+    "history": [
+        {
+            "timestamp": "2026-09-06T08:31:49.299Z",
+            "global_rank": 172184,
+            "country_rank": 2973,
+            "pp": 4048.24,
+            "play_count": 14144,
+            "play_time": 1787349,
+            "total_score": 73549892503,
+            "total_hits": 5630048,
+            "accuracy": 98.5849,
+            "maximum_combo": 1728
+        }
+    ]
 }
