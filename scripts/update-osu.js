@@ -1,9 +1,7 @@
 const fs = require("fs");
 
-
 const clientId = process.env.OSU_CLIENT_ID;
 const clientSecret = process.env.OSU_CLIENT_SECRET;
-
 const username = process.env.OSU_USERNAME;
 
 
@@ -122,6 +120,11 @@ async function main() {
         user.statistics;
 
 
+    const updatedAt =
+        new Date().toISOString();
+
+
+    // 当前数据
     const result = {
 
         username:
@@ -142,11 +145,26 @@ async function main() {
         pp:
             statistics.pp,
 
+        play_count:
+            statistics.play_count,
+
         play_time:
             statistics.play_time,
 
+        total_score:
+            statistics.total_score,
+
+        total_hits:
+            statistics.total_hits,
+
+        accuracy:
+            statistics.hit_accuracy,
+
+        maximum_combo:
+            statistics.maximum_combo,
+
         updated_at:
-            new Date().toISOString()
+            updatedAt
 
     };
 
@@ -159,12 +177,124 @@ async function main() {
     );
 
 
+    // --------------------------------
+    // 1. 保存当前数据
+    // --------------------------------
+
     fs.writeFileSync(
 
         "data/osu.json",
 
         JSON.stringify(
             result,
+            null,
+            4
+        ) + "\n"
+
+    );
+
+
+    // --------------------------------
+    // 2. 更新历史数据
+    // --------------------------------
+
+    const historyFile =
+        "data/osu-history.json";
+
+
+    let historyData = {
+
+        username:
+            username,
+
+        mode:
+            "osu",
+
+        history:
+            []
+
+    };
+
+
+    if (fs.existsSync(historyFile)) {
+
+        try {
+
+            historyData =
+                JSON.parse(
+                    fs.readFileSync(
+                        historyFile,
+                        "utf8"
+                    )
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "osu-history.json 无法解析，将重新创建。"
+            );
+
+        }
+
+    }
+
+
+    if (!Array.isArray(historyData.history)) {
+
+        historyData.history = [];
+
+    }
+
+
+    // 只把需要用于历史图表的数据保存下来
+    historyData.history.push({
+
+        timestamp:
+            updatedAt,
+
+        global_rank:
+            statistics.global_rank,
+
+        country_rank:
+            statistics.country_rank,
+
+        pp:
+            statistics.pp,
+
+        play_count:
+            statistics.play_count,
+
+        play_time:
+            statistics.play_time,
+
+        total_score:
+            statistics.total_score,
+
+        total_hits:
+            statistics.total_hits,
+
+        accuracy:
+            statistics.hit_accuracy,
+
+        maximum_combo:
+            statistics.maximum_combo
+
+    });
+
+
+    historyData.username =
+        user.username;
+
+    historyData.mode =
+        "osu";
+
+
+    fs.writeFileSync(
+
+        historyFile,
+
+        JSON.stringify(
+            historyData,
             null,
             4
         ) + "\n"
@@ -181,6 +311,10 @@ async function main() {
     );
 
     console.log(result);
+
+    console.log(
+        `历史数据点数量: ${historyData.history.length}`
+    );
 
     console.log(
         "================================"

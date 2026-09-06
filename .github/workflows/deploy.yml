@@ -6,44 +6,64 @@ on:
   # 可以手动运行
   workflow_dispatch:
 
-  # 每 6 小时运行一次
+  # 每天运行一次
+  # GitHub 使用 UTC
+  # 16:00 UTC = UTC+8 0:00
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 16 * * *"
 
 
 permissions:
-  contents: read
+
+  contents: write
   pages: write
   id-token: write
 
 
 concurrency:
+
   group: "pages"
   cancel-in-progress: false
 
 
 jobs:
 
+
   build:
 
     runs-on: ubuntu-latest
 
+
     steps:
 
-      # 1. 获取仓库代码
+
+      # 1. 获取 main 分支的网站代码
       - name: Checkout
         uses: actions/checkout@v4
 
 
-      # 2. 安装 Node.js
+      # 2. 获取 osu-data 分支
+      - name: Fetch osu data branch
+        run: |
+
+          git fetch origin osu-data:refs/remotes/origin/osu-data
+
+          mkdir -p data
+
+          git show origin/osu-data:data/osu-history.json > data/osu-history.json
+
+
+      # 3. 安装 Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
+
         with:
           node-version: 22
 
 
-      # 3. 获取最新 osu 数据
+      # 4. 获取最新 osu 数据
       - name: Update osu stats
+
         env:
 
           OSU_CLIENT_ID:
@@ -56,34 +76,59 @@ jobs:
             Solidephile
 
         run: |
+
           node scripts/update-osu.js
 
 
-      # 4. 配置 GitHub Pages
+      # 5. 提交历史数据到 osu-data 分支
+      - name: Save osu history
+
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/osu-history.json
+
+          git commit -m "Update osu stats"
+
+          git push origin HEAD:osu-data
+
+
+      # 6. 配置 GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
 
-      # 5. 将整个网站打包
+      # 7. 将整个网站打包
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+
         with:
           path: .
 
 
   deploy:
 
+
     environment:
+
       name: github-pages
+
       url: ${{ steps.deployment.outputs.page_url }}
+
 
     runs-on: ubuntu-latest
 
     needs: build
 
+
     steps:
 
-      # 6. 部署到 GitHub Pages
+
+      # 8. 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
+
         id: deployment
+
         uses: actions/deploy-pages@v4
