@@ -50,7 +50,7 @@ jobs:
 
           mkdir -p data
 
-          git show origin/osu_data:data/osu-history.json > data/osu-history.json
+          git show origin/osu_data:data/osu_history.json > data/osu_history.json
 
 
       # 3. 安装 Node.js
@@ -88,7 +88,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/osu-history.json
+          git add data/osu_history.json
 
           git commit -m "Update osu stats"
 
