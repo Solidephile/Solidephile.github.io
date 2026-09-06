@@ -199,7 +199,7 @@ async function main() {
     // --------------------------------
 
     const historyFile =
-        "data/osu-history.json";
+        "data/osu_history.json";
 
 
     let historyData = {
@@ -231,7 +231,7 @@ async function main() {
         } catch (error) {
 
             console.warn(
-                "osu-history.json 无法解析，将重新创建。"
+                "osu_history.json 无法解析，将重新创建。"
             );
 
         }
