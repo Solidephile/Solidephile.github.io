@@ -46,11 +46,11 @@ jobs:
       - name: Fetch osu data branch
         run: |
 
-          git fetch origin osu-data:refs/remotes/origin/osu-data
+          git fetch origin osu_data:refs/remotes/origin/osu_data
 
           mkdir -p data
 
-          git show origin/osu-data:data/osu-history.json > data/osu-history.json
+          git show origin/osu_data:data/osu-history.json > data/osu-history.json
 
 
       # 3. 安装 Node.js
@@ -80,7 +80,7 @@ jobs:
           node scripts/update-osu.js
 
 
-      # 5. 提交历史数据到 osu-data 分支
+      # 5. 提交历史数据到 osu_data 分支
       - name: Save osu history
 
         run: |
@@ -92,7 +92,7 @@ jobs:
 
           git commit -m "Update osu stats"
 
-          git push origin HEAD:osu-data
+          git push origin HEAD:osu_data
 
 
       # 6. 配置 GitHub Pages
