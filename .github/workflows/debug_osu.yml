@@ -1,13 +1,11 @@
 ```yaml
-name: Update osu Stats and Deploy
+name: Debug osu Stats and Deploy
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 2 * * *"
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -31,28 +29,7 @@ jobs:
 
 
       # =========================
-      # 2. Checkout osu_data
-      # =========================
-
-      - name: Checkout osu_data branch
-        uses: actions/checkout@v4
-        with:
-          ref: osu_data
-          path: osu_data_branch
-
-
-      # =========================
-      # 3. Copy history to main
-      # =========================
-
-      - name: Prepare osu history
-        run: |
-          mkdir -p data
-          cp osu_data_branch/data/osu_history.json data/osu_history.json
-
-
-      # =========================
-      # 4. Setup Node.js
+      # 2. Setup Node.js
       # =========================
 
       - name: Setup Node.js
@@ -62,7 +39,7 @@ jobs:
 
 
       # =========================
-      # 5. Update osu stats
+      # 3. Update osu stats
       # =========================
 
       - name: Update osu stats
@@ -70,36 +47,13 @@ jobs:
           OSU_CLIENT_ID: ${{ secrets.OSU_CLIENT_ID }}
           OSU_CLIENT_SECRET: ${{ secrets.OSU_CLIENT_SECRET }}
           OSU_USERNAME: Solidephile
-          UPDATE_HISTORY: "true"
+          UPDATE_HISTORY: "false"
         run: |
           node scripts/update_osu.js
 
 
       # =========================
-      # 6. Save osu history
-      # =========================
-
-      - name: Save osu history
-        working-directory: osu_data_branch
-        run: |
-
-          cp ../data/osu_history.json data/osu_history.json
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add data/osu_history.json
-
-          if git diff --cached --quiet; then
-            echo "No osu history changes."
-          else
-            git commit -m "Update osu stats"
-            git push origin osu_data
-          fi
-
-
-      # =========================
-      # 7. Setup Pages
+      # 4. Setup Pages
       # =========================
 
       - name: Setup Pages
@@ -107,7 +61,7 @@ jobs:
 
 
       # =========================
-      # 8. Upload website
+      # 5. Upload website
       # =========================
 
       - name: Upload artifact
@@ -117,7 +71,7 @@ jobs:
 
 
   # =========================
-  # 9. Deploy
+  # 6. Deploy
   # =========================
 
   deploy:
