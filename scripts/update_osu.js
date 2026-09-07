@@ -153,6 +153,9 @@ async function main() {
 
         username:
             user.username,
+		
+		avatar_url: 
+			user.avatar_url,
 
         country:
             user.country?.name || "Unknown",

@@ -7,6 +7,10 @@ async function loadOsuData() {
         }
 
         const data = await response.json();
+		
+		if (data.avatar_url) {
+			avatar.src = data.avatar_url;
+		}
 
         document.getElementById("username").textContent =
             data.username;
