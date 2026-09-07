@@ -1,4 +1,3 @@
-```javascript
 const fs = require("fs");
 
 const clientId = process.env.OSU_CLIENT_ID;
@@ -445,4 +444,3 @@ main().catch(error => {
     process.exit(1);
 
 });
-```
