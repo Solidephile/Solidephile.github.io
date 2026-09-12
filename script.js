@@ -106,11 +106,7 @@ function formatPlayTime(seconds) {
 
     const minutes = totalMinutes % 60;
 
-    if (days > 0) {
-        return `${days}d ${hours}h`;
-    }
-
-    return `${hours}h ${minutes}m`;
+    return `${days}d ${hours}h ${minutes}m`;
 }
 
 
@@ -313,7 +309,9 @@ function makeLineChart({
 
                     tension: 0.32,
 
-                    fill: true,
+                    fill: {
+						target: "origin"
+					},
 
                     backgroundColor:
                         context => {
