@@ -1,116 +1,191 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>My osu! Profile</title>
+    <title>Solidephile — osu! Stats</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
     <main class="container">
 
-        <!-- Header -->
         <header class="hero">
             <div>
                 <p class="eyebrow">MY PROFILE</p>
                 <h1>osu! Stats</h1>
-                <p class="subtitle">
-                    A small part of my personal website.
-                </p>
+                <p class="subtitle">A small part of my personal website.</p>
             </div>
 
-            <div class="osu-logo">
-                osu!
-            </div>
+            <div class="osu-logo">osu!</div>
         </header>
 
-
-        <!-- Player Card -->
         <section class="profile-card">
-
             <div class="profile-header">
                 <div class="avatar">
                     <img id="avatar" src="" alt="osu! avatar">
                 </div>
 
-                <div>
+                <div class="player-info">
                     <p class="player-label">PLAYER</p>
-                    <h2 id="username">YourUsername</h2>
-                    <p id="country">Japan</p>
+                    <h2 id="username">Solidephile</h2>
+                    <p id="country">China</p>
                 </div>
             </div>
 
-
-            <!-- Stats -->
             <div class="stats-grid">
-
                 <div class="stat">
-                    <span class="stat-label">
-                        GLOBAL RANK
-                    </span>
-
-                    <strong id="global-rank">
-                        #12,345
-                    </strong>
+                    <span class="stat-label">GLOBAL RANK</span>
+                    <strong id="global-rank">—</strong>
                 </div>
 
-
                 <div class="stat">
-                    <span class="stat-label">
-                        COUNTRY RANK
-                    </span>
-
-                    <strong id="country-rank">
-                        #1,234
-                    </strong>
+                    <span class="stat-label">COUNTRY RANK</span>
+                    <strong id="country-rank">—</strong>
                 </div>
 
-
                 <div class="stat">
-                    <span class="stat-label">
-                        PERFORMANCE
-                    </span>
-
-                    <strong id="pp">
-                        8,542
-                        <small>pp</small>
-                    </strong>
+                    <span class="stat-label">PERFORMANCE</span>
+                    <strong id="pp">— <small>pp</small></strong>
                 </div>
 
-
                 <div class="stat">
-                    <span class="stat-label">
-                        PLAY TIME
-                    </span>
-
-                    <strong id="play-time">
-                        123h 45m
-                    </strong>
+                    <span class="stat-label">PLAY TIME</span>
+                    <strong id="play-time">—</strong>
                 </div>
-
             </div>
-
         </section>
 
+        <section class="history-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">HISTORY</p>
+                    <h2>Progress over time</h2>
+                </div>
 
-        <!-- Footer -->
+                <span id="history-count" class="history-count">— data points</span>
+            </div>
+
+            <div class="charts-grid">
+                <article class="chart-card chart-card-wide">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Performance</h3>
+                            <p>Performance points over time</p>
+                        </div>
+                        <span class="chart-unit">pp</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="pp-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Global Rank</h3>
+                            <p>Lower is better</p>
+                        </div>
+                        <span class="chart-unit">#</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="global-rank-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Country Rank</h3>
+                            <p>Rank within your country</p>
+                        </div>
+                        <span class="chart-unit">#</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="country-rank-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Play Count</h3>
+                            <p>Total plays</p>
+                        </div>
+                        <span class="chart-unit">plays</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="play-count-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Play Time</h3>
+                            <p>Total time played</p>
+                        </div>
+                        <span class="chart-unit">hours</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="play-time-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Total Score</h3>
+                            <p>Cumulative score</p>
+                        </div>
+                        <span class="chart-unit">score</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="total-score-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Total Hits</h3>
+                            <p>Cumulative hit count</p>
+                        </div>
+                        <span class="chart-unit">hits</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="total-hits-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Accuracy</h3>
+                            <p>Overall accuracy</p>
+                        </div>
+                        <span class="chart-unit">%</span>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="accuracy-chart"></canvas>
+                    </div>
+                </article>
+            </div>
+        </section>
+
         <footer>
-			<div class="osu-updated">
-				Updated <span id="last-updated">--</span> ago
-			</div>
+            <div class="osu-updated">
+                Updated <span id="last-updated">--</span> ago
+            </div>
+            <span class="footer-dot">·</span>
+            <span>History updates daily</span>
         </footer>
 
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
