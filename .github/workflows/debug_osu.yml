@@ -14,33 +14,43 @@ concurrency:
 
 jobs:
 
+  # =========================
+  # Build
+  # =========================
+
   build:
     runs-on: ubuntu-latest
 
     steps:
 
-      # =========================
       # 1. Checkout main
-      # =========================
-
       - name: Checkout main
         uses: actions/checkout@v4
 
 
-      # =========================
-      # 2. Setup Node.js
-      # =========================
+      # 2. Checkout osu_data (read only)
+      - name: Checkout osu_data branch
+        uses: actions/checkout@v4
+        with:
+          ref: osu_data
+          path: osu_data_branch
 
+
+      # 3. Copy history to main
+      - name: Prepare osu history
+        run: |
+          mkdir -p data
+          cp osu_data_branch/data/osu_history.json data/osu_history.json
+
+
+      # 4. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
 
-      # =========================
-      # 3. Update osu stats
-      # =========================
-
+      # 5. Update osu stats
       - name: Update osu stats
         env:
           OSU_CLIENT_ID: ${{ secrets.OSU_CLIENT_ID }}
@@ -51,26 +61,37 @@ jobs:
           node scripts/update_osu.js
 
 
-      # =========================
-      # 4. Setup Pages
-      # =========================
+      # 6. Prepare Pages directory
+      - name: Prepare website
+        run: |
+          rm -rf dist
+          mkdir -p dist/data
 
+          cp index.html dist/
+          cp style.css dist/
+          cp script.js dist/
+
+          cp data/osu.json dist/data/osu.json
+          cp data/osu_history.json dist/data/osu_history.json
+
+          echo "=== Files to deploy ==="
+          find dist -type f
+
+
+      # 7. Setup Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
 
-      # =========================
-      # 5. Upload website
-      # =========================
-
+      # 8. Upload website
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ./dist
 
 
   # =========================
-  # 6. Deploy
+  # Deploy
   # =========================
 
   deploy:
