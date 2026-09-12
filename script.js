@@ -204,15 +204,11 @@ function makeLineChart({
     data,
     key,
     label,
-
     valueFormat = "compact",
-
     suffix = "",
-
     reverse = false,
-
+    fillBelow = false,
     yMin,
-
     yMax
 }) {
     const canvas = document.getElementById(id);
@@ -309,9 +305,7 @@ function makeLineChart({
 
                     tension: 0.32,
 
-                    fill: {
-						target: "origin"
-					},
+                    fill: fillBelow ? "start" : "origin",
 
                     backgroundColor:
                         context => {
@@ -629,7 +623,9 @@ function renderCharts(history) {
          * improving rank moves upward.
          */
 
-        reverse: true
+        reverse: true,
+		
+		fillBelow: true
 
     });
 
@@ -654,7 +650,9 @@ function renderCharts(history) {
          * Smaller rank = better.
          */
 
-        reverse: true
+        reverse: true,
+		
+		fillBelow: true
 
     });
 
