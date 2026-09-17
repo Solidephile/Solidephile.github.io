@@ -145,6 +145,18 @@
             "total_hits": 5882172,
             "accuracy": 98.544,
             "maximum_combo": 1728
+        },
+        {
+            "timestamp": "2026-09-17T23:31:18.955Z",
+            "global_rank": 171528,
+            "country_rank": 2951,
+            "pp": 4079.43,
+            "play_count": 14612,
+            "play_time": 1859591,
+            "total_score": 77406585925,
+            "total_hits": 5904475,
+            "accuracy": 98.5631,
+            "maximum_combo": 1728
         }
     ]
 }
